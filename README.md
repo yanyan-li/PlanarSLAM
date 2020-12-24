@@ -9,7 +9,7 @@ This repo will be released at the beginning of 2021 for celebrating the new year
 
 
 ## Introduction
-This repo proposes a RGB-D SLAM system specifically designed for structured environments and aimed at improved tracking and mapping accuracy by relying on geometric features that are extracted from the surrounding. More details can be found from our papers ([RGB-D](https://arxiv.org/abs/2010.07997) and [Monocular](arxiv.org/abs/2008.01963)).
+This repo proposes a RGB-D SLAM system specifically designed for structured environments and aimed at improved tracking and mapping accuracy by relying on geometric features that are extracted from the surrounding. More details can be found from our papers ([RGB-D](https://arxiv.org/abs/2010.07997) and [Monocular](https://arxiv.org/abs/2008.01963)).
 
 ## 1. Prerequisites
 
