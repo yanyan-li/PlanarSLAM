@@ -4,7 +4,7 @@ This repo will be released at the beginning of 2021 for celebrating the new year
 
 ----
 
-![teaser](Examples\teaser.png)
+<img src="Examples/teaser.png"/>
 
 # 1. Prerequisites
 
