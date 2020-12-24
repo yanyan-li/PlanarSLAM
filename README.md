@@ -4,7 +4,7 @@ This repo will be released at the beginning of 2021 for celebrating the new year
 
 ----
 
-![teaser](https://github.com/yanyan-li/PlanarSLAM/tree/master/Examples/teaser.png)
+![teaser](Examples\teaser.png)
 
 # 1. Prerequisites
 
