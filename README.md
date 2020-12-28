@@ -1,15 +1,27 @@
 # PlanarSLAM
+This repo proposes a RGB-D SLAM system specifically designed for structured environments and aimed at improved tracking and mapping accuracy by relying on geometric features that are extracted from the surrounding. More details can be found from our papers ([RGB-D](https://arxiv.org/abs/2010.07997) and [Monocular](https://arxiv.org/abs/2008.01963)).  
 
-This repo will be released at the beginning of 2021 for celebrating the new year.  We hope everyone has a happy time and our world will get better soon. 
+*The system will be released at the beginning of 2021 for celebrating the new year.  We hope everyone has a happy time and our world will get better soon.*
 
-----
-
-<img src="Examples/teaser.png"/>
-
+**Authors: ** Yanyan Li, Raza Yunus, Nikolas Brasch, Nassir Navab and Federico Tombari<img src="Examples/teaser.png"/>
 
 
-## Introduction
-This repo proposes a RGB-D SLAM system specifically designed for structured environments and aimed at improved tracking and mapping accuracy by relying on geometric features that are extracted from the surrounding. More details can be found from our papers ([RGB-D](https://arxiv.org/abs/2010.07997) and [Monocular](https://arxiv.org/abs/2008.01963)).
+
+## License
+
+PlanarSLAM is released under a [GPLv3 license](https://github.com/raulmur/ORB_SLAM2/blob/master/License-gpl.txt). 
+
+For a closed-source version of ORB-SLAM2 for commercial purposes, please contact the authors: yanyan.li (at) tum.de.
+
+If you use PlanarSLAM  in an academic work, please cite:
+```
+inproceedings{Li2020SSLAM,
+  author = {Li, Yanyan and Yunus, Raza and Brasch, Nikolas and Navab, Nassir and Tombari, Federico},
+  title = {RGB-D SLAM with Structural Regularities},
+  year = {2020},
+  booktitle = {arXiv:2010.07997},
+ }
+```
 
 ## 1. Prerequisites
 
@@ -69,17 +81,15 @@ ICL NUIM
 *command for testing TUM-RGBD sequences* 
 
 ```
-./Examples/RGB-D/rgbd_tum Vocabulary/ORBvoc.txt Examples/RGB-D/TUM3.yaml PATH_TO_SEQUENCE_FOLDER .PATH_TO_SEQUENCE_FOLDER/ASSOCIATIONS_FILE
+./Examples/RGB-D/Planar_SLAM Vocabulary/ORBvoc.txt Examples/RGB-D/TUM3.yaml PATH_TO_SEQUENCE_FOLDER .PATH_TO_SEQUENCE_FOLDER/ASSOCIATIONS_FILE
 
 ```
 *command for testing ICL-NUIM sequences*
 
 ```
-./Examples/RGB-D/rgbd_tum Vocabulary/ORBvoc.txt Examples/RGB-D/ICL.yaml PATH_TO_SEQUENCE_FOLDER  PATH_TO_SEQUENCE_FOLDER/ASSOCIATIONS_FILE
+./Examples/RGB-D/Planar_SLAM Vocabulary/ORBvoc.txt Examples/RGB-D/ICL.yaml PATH_TO_SEQUENCE_FOLDER  PATH_TO_SEQUENCE_FOLDER/ASSOCIATIONS_FILE
 
 ```
-
-
 
 ----
 
@@ -100,4 +110,8 @@ inproceedings{Li2020SSLAM,
   booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
  }
 ```
+
+## Acknowledgement
+
+ORB_SLAM2 and the corresponding community.
 
