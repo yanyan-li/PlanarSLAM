@@ -1,31 +1,8 @@
-/**
-* This file is part of ORB-SLAM2.
-*
-* Copyright (C) 2014-2016 Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
-* For more information see <https://github.com/raulmur/ORB_SLAM2>
-*
-* ORB-SLAM2 is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* ORB-SLAM2 is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with ORB-SLAM2. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-
 #include<iostream>
 #include<algorithm>
 #include<fstream>
 #include<chrono>
-
 #include<opencv2/core/core.hpp>
-
 #include<System.h>
 #include<Mesh.h>
 #include<MapPlane.h>
@@ -39,7 +16,7 @@ int main(int argc, char **argv)
 {
     if(argc != 5)
     {
-        cerr << endl << "Usage: ./rgbd_tum path_to_vocabulary path_to_settings path_to_sequence path_to_association" << endl;
+        cerr << endl << "Usage: ./Planar_SLAM path_to_vocabulary path_to_settings path_to_sequence path_to_association" << endl;
         return 1;
     }
 
@@ -64,19 +41,19 @@ int main(int argc, char **argv)
     }
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM2::System SLAM(argv[1],argv[2],ORB_SLAM2::System::RGBD,true);
-    ORB_SLAM2::Config::SetParameterFile(argv[2]);
+    Planar_SLAM::System SLAM(argv[1], argv[2], Planar_SLAM::System::RGBD, true);
+    Planar_SLAM::Config::SetParameterFile(argv[2]);
 
     // Vector for tracking time statistics
     vector<float> vTimesTrack;
     vTimesTrack.resize(nImages);
 
-    // Main loop
+    // Feed each image to the system
     cv::Mat imRGB, imD;
     for(int ni=0; ni<nImages; ni++)
     {
-        cout<<"************ the "<<ni<<"th image"<<endl;
-        // Read image and depthmap from file
+        cout<<"PlanarSLAM Printer: This is the "<<ni<<"th image"<<endl;
+        // a RGB-D pair
         imRGB = cv::imread(string(argv[3])+"/"+vstrImageFilenamesRGB[ni],CV_LOAD_IMAGE_UNCHANGED);
         imD = cv::imread(string(argv[3])+"/"+vstrImageFilenamesD[ni],CV_LOAD_IMAGE_UNCHANGED);
         double tframe = vTimestamps[ni];
@@ -119,7 +96,7 @@ int main(int argc, char **argv)
     }
     char bStop;
 
-    cout << "please type 'x', if you want to shutdown the system." << endl;
+    cerr << "PlanarSLAM Printer: Please type 'x', if you want to shutdown windows." << endl;
 
     while (bStop != 'x'){
         bStop = getchar();
@@ -134,75 +111,13 @@ int main(int argc, char **argv)
     {
         totaltime+=vTimesTrack[ni];
     }
-    cout << "-------" << endl << endl;
+    cout << "PlanarSLAM Printer:" << endl << endl;
     cout << "median tracking time: " << vTimesTrack[nImages/2] << endl;
     cout << "mean tracking time: " << totaltime/nImages << endl;
 
     // Save camera trajectory
     SLAM.SaveTrajectoryTUM("CameraTrajectory.txt");
     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
-
-//        auto mMap = SLAM.getMap();
-//
-//    boost::shared_ptr<pcl::visualization::PCLVisualizer> meshViewer (new pcl::visualization::PCLVisualizer ("MAP3D MESH"));
-//
-//    pcl::PointCloud<pcl::PointXYZ>::Ptr saveCloud(new pcl::PointCloud<pcl::PointXYZ>());
-//
-//    std::vector<ORB_SLAM2::MapPlane*> PlaneMap = mMap->GetAllMapPlanes();
-////    std::vector<ORB_SLAM2::MapPoint*> PointMap = mMap->GetAllMapPointsAssociatedWithPlanes();
-//
-////    pcl::PointCloud<pcl::PointXYZ>::Ptr meshCloud(new pcl::PointCloud<pcl::PointXYZ>());
-//    int i = 0;
-//    for(auto pMP : PlaneMap){
-//        int ir = pMP->mRed;
-//        int ig = pMP->mGreen;
-//        int ib = pMP->mBlue;
-//
-//        for(auto& p : pMP->mvPlanePoints.get()->points){
-//            p.r = ir;
-//            p.g = ig;
-//            p.b = ib;
-//        }
-//
-//        pcl::PointCloud<pcl::PointXYZ>::Ptr meshCloud(new pcl::PointCloud<pcl::PointXYZ>());
-//        for(auto& planePoint : pMP->mvPlanePoints.get()->points){
-//            pcl::PointXYZ p;
-//            p.x = planePoint.x;
-//            p.y = planePoint.y;
-//            p.z = planePoint.z;
-//
-//            saveCloud->points.push_back(p);
-////            meshCloud->points.push_back(p);
-//        }
-//
-////        pcl::PolygonMesh cloud_mesh;
-////        Mesh::create_mesh(meshCloud, 2, 1, cloud_mesh);
-////        meshViewer->addPolygonMesh(cloud_mesh, std::to_string(i++));
-////        meshViewer->addPointCloud(pMP->mvPlanePoints, std::to_string(i++));
-//    }
-//
-//    pcl::PointCloud<pcl::PointXYZ>::Ptr meshCloud(new pcl::PointCloud<pcl::PointXYZ>());
-//
-//    pcl::io::savePLYFile ("corridor.ply", *saveCloud);
-//
-////    for(auto pMP : PointMap){
-////
-////        auto pW = pMP->GetWorldPos();
-////        pcl::PointXYZ p;
-////        p.x = pW.at<float>(0);
-////        p.y = pW.at<float>(1);
-////        p.z = pW.at<float>(2);
-////        meshCloud->points.push_back(p);
-////    }
-////
-////    pcl::PolygonMesh cloud_mesh;
-////    Mesh::create_mesh(meshCloud, 1, 1, cloud_mesh);
-////
-////    meshViewer->addPolygonMesh(cloud_mesh);
-////
-////    while (!meshViewer->wasStopped ()){
-////        meshViewer->spin();
-////    }
 
     return 0;
 }
