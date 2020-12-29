@@ -28,7 +28,7 @@
 
 #include "MeshViewer.h"
 #include "MapPlane.h"
-#include "PlaneViewer.h"
+
 
 class MeshViewer;
 
@@ -135,7 +135,6 @@ public:
     void Reset();
 
     shared_ptr<MeshViewer>  mpPointCloudMapping;
-    shared_ptr<PlaneViewer> planeViewer;
 
 protected:
 

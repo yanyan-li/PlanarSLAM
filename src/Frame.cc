@@ -1,9 +1,7 @@
 #include "Frame.h"
 #include "Converter.h"
-#include "ORBmatcher.h"
-
 #include <thread>
-#include <include/LocalMapping.h>
+
 
 using namespace std;
 using namespace cv;

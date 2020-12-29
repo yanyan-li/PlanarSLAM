@@ -9,20 +9,15 @@
 #include "ORBVocabulary.h"
 #include "KeyFrame.h"
 #include "ORBextractor.h"
-
 #include <opencv2/opencv.hpp>
-
-
 #include "ExtractLineSegment.h"
 #include "MapLine.h"
 #include "LineExtractor.h"
 #include "auxiliar.h"
 #include <fstream>
-
 #include "Config.h"
 #include "MapPlane.h"
 #include "PlaneExtractor.h"
-#include "PlaneViewer.h"
 
 #include <pcl/common/transforms.h>
 #include <pcl/point_types.h>

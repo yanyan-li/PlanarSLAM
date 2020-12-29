@@ -1,23 +1,16 @@
 #include "Tracking.h"
-
-#include <opencv2/core/core.hpp>
-#include <opencv2/features2d/features2d.hpp>
-
 #include "ORBmatcher.h"
 #include "FrameDrawer.h"
 #include "Converter.h"
 #include "Map.h"
 #include "Initializer.h"
-
 #include "Optimizer.h"
 #include "PnPsolver.h"
-
-
 #include <iostream>
-
 #include <mutex>
 #include "PlaneExtractor.h"
 #include <opencv2/core/eigen.hpp>
+#include <opencv2/core/core.hpp>
 using namespace std;
 using namespace cv;
 using namespace cv::line_descriptor;
