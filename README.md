@@ -3,7 +3,9 @@ This repo proposes a RGB-D SLAM system specifically designed for structured envi
 
 *The system will be released at the beginning of 2021 for celebrating the new year.  We hope everyone has a happy time and our world will get better soon.*
 
-**Authors: ** Yanyan Li, Raza Yunus, Nikolas Brasch, Nassir Navab and Federico Tombari<img src="Examples/teaser.png"/>
+**Authors:** Yanyan Li, Raza Yunus, Nikolas Brasch, Nassir Navab and Federico Tombari
+
+<img src="Examples/teaser.png"/>
 
 
 
