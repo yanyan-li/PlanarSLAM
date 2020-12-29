@@ -26,11 +26,11 @@
 #include "LSDmatcher.h"
 #include "PlaneMatcher.h"
 
-#include "PointCloudMapping.h"
+#include "MeshViewer.h"
 #include "MapPlane.h"
 #include "PlaneViewer.h"
 
-class PointCloudMapping;
+class MeshViewer;
 
 namespace Planar_SLAM
 {
@@ -134,7 +134,7 @@ public:
 
     void Reset();
 
-    shared_ptr<PointCloudMapping>  mpPointCloudMapping;
+    shared_ptr<MeshViewer>  mpPointCloudMapping;
     shared_ptr<PlaneViewer> planeViewer;
 
 protected:

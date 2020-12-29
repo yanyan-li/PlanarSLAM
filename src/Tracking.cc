@@ -64,7 +64,6 @@ namespace Planar_SLAM {
 
         cout << "img_width = " << img_width << endl<< "img_height = " << img_height << endl;
 
-        // 
         initUndistortRectifyMap(mK, mDistCoef, Mat_<double>::eye(3, 3), mK, Size(img_width, img_height), CV_32F,
                                 mUndistX, mUndistY);
 
@@ -82,7 +81,6 @@ namespace Planar_SLAM {
 
         cout << endl << "Camera Parameters: " << endl;
         cout << "- fx: " << fx << endl;
-
         cout << "- fy: " << fy << endl;
         cout << "- cx: " << cx << endl;
         cout << "- cy: " << cy << endl;
@@ -116,9 +114,6 @@ namespace Planar_SLAM {
         if (sensor == System::STEREO)
             mpORBextractorRight = new ORBextractor(nFeatures, fScaleFactor, nLevels, fIniThFAST, fMinThFAST);
 
-        if (sensor == System::MONOCULAR)
-            mpIniORBextractor = new ORBextractor(2 * nFeatures, fScaleFactor, nLevels, fIniThFAST, fMinThFAST);
-
         cout << endl << "ORB Extractor Parameters: " << endl;
         cout << "- Number of Features: " << nFeatures << endl;
         cout << "- Scale Levels: " << nLevels << endl;
@@ -150,7 +145,7 @@ namespace Planar_SLAM {
         manhattanCount = 0;
         fullManhattanCount = 0;
 
-        mpPointCloudMapping = make_shared<PointCloudMapping>(mpMap);
+        mpPointCloudMapping = make_shared<MeshViewer>(mpMap);
     }
 
 
