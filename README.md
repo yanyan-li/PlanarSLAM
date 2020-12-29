@@ -13,9 +13,8 @@ This repo proposes a RGB-D SLAM system specifically designed for structured envi
 
 PlanarSLAM is released under a [GPLv3 license](https://github.com/raulmur/ORB_SLAM2/blob/master/License-gpl.txt). 
 
-For a closed-source version of ORB-SLAM2 for commercial purposes, please contact the authors: yanyan.li (at) tum.de.
+For commercial purposes, please contact the authors: yanyan.li (at) tum.de. If you use PlanarSLAM  in an academic work, please cite:
 
-If you use PlanarSLAM  in an academic work, please cite:
 ```
 inproceedings{Li2020SSLAM,
   author = {Li, Yanyan and Yunus, Raza and Brasch, Nikolas and Navab, Nassir and Tombari, Federico},
