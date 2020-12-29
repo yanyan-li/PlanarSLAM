@@ -1,11 +1,4 @@
-//
-// Created by yan on 18-8-2.
-//
-
 #include "LineExtractor.h"
-//
-// Created by yan on 18-8-2.
-//
 
 using namespace std;
 using namespace cv;
@@ -1471,16 +1464,7 @@ double mah_dist3d_pt_line (const RandomPoint3d& pt, const cv::Point3d& q1, const
             term5 = (c4*(x1-xa)-c4*(x1-xb)+c5*(x2-ya)-c5*(x2-yb)+c6*(x3-za)-c6*(x3-zb)) ,
             term6 = (c7*(x1-xa)-c7*(x1-xb)+c8*(x2-ya)-c8*(x2-yb)+c9*(x3-za)-c9*(x3-zb));
     out = sqrt((term1 * term1 + term2* term2 + term3 * term3)/( term4*term4 + term5*term5 + term6*term6));
-/*
-    double x1 = pt.dux[0], x2 = pt.dux[1], x3 = pt.dux[2];
-    double term1 = (-x1+c1*xa+c2*ya+c3*za)*(-x2+c4*xb+c5*yb+c6*zb)-(-x2+c4*xa+c5*ya+c6*za)*(-x1+c1*xb+c2*yb+c3*zb),
-     term2 =(-x1+c1*xa+c2*ya+c3*za)*(-x3+c7*xb+c8*yb+c9*zb)-(-x3+c7*xa+c8*ya+c9*za)*(-x1+c1*xb+c2*yb+c3*zb),
-     term3 = (-x2+c4*xa+c5*ya+c6*za)*(-x3+c7*xb+c8*yb+c9*zb)-(-x3+c7*xa+c8*ya+c9*za)*(-x2+c4*xb+c5*yb+c6*zb),
-     term4 = c1*xa-c1*xb+c2*ya-c2*yb+c3*za-c3*zb,
-     term5 = c4*xa-c4*xb+c5*ya-c5*yb+c6*za-c6*zb,
-     term6 = c7*xa-c7*xb+c8*ya-c8*yb+c9*za-c9*zb;
-    out = sqrt(((term1*term1)+(term2*term2)+(term3*term3))/((term4*term4)+(term5*term5)+(term6*term6)));
-*/
+
     return out;
 
 }

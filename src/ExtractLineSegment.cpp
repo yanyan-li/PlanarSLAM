@@ -1,7 +1,3 @@
-//
-// Created by lan on 17-12-13.
-//
-
 #include "ExtractLineSegment.h"
 #include <opencv2/line_descriptor/descriptor.hpp>
 
@@ -10,7 +6,7 @@ using namespace cv;
 using namespace cv::line_descriptor;
 using namespace Eigen;
 
-namespace ORB_SLAM2 {
+namespace Planar_SLAM {
     LineSegment::LineSegment() {}
 
     void LineSegment::ExtractLineSegment(const Mat &img, vector<KeyLine> &keylines, Mat &ldesc,
