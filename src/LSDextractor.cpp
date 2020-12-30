@@ -1,4 +1,4 @@
-#include "LSDextractor"
+#include "LSDextractor.h"
 #include <opencv2/line_descriptor/descriptor.hpp>
 
 using namespace std;

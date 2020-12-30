@@ -246,6 +246,7 @@ void System::SaveTrajectoryTUM(const string &filename)
         f << setprecision(6) << *lT << " " <<  setprecision(9) << twc.at<float>(0) << " " << twc.at<float>(1) << " " << twc.at<float>(2) << " " << q[0] << " " << q[1] << " " << q[2] << " " << q[3] << endl;
     }
     f.close();
+
     cout << endl << "trajectory saved!" << endl;
 }
 
@@ -317,5 +318,13 @@ void System::SaveKeyFrameTrajectoryTUM(const string &filename)
     f.close();
     cout << endl << "trajectory saved!" << endl;
 }
+
+void System::SaveMesh(const string&filename){
+    cout << endl << "Saving camera trajectory to " << filename << " ..." << endl;
+    mpTracker->SaveMesh(filename);
+    cout<< "mesh saved!"<<endl;
+}
+
+
 
 } //namespace Planar_SLAM

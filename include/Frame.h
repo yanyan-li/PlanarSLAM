@@ -10,9 +10,9 @@
 #include "KeyFrame.h"
 #include "ORBextractor.h"
 #include <opencv2/opencv.hpp>
-#include "ExtractLineSegment.h"
+//#include "LSDextractor"
 #include "MapLine.h"
-#include "LineExtractor.h"
+#include "LSDextractor.h"
 #include "auxiliar.h"
 #include <fstream>
 #include "Config.h"

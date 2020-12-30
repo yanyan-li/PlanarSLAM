@@ -2731,5 +2731,10 @@ namespace Planar_SLAM {
         mbOnlyTracking = flag;
     }
 
+    void Tracking::SaveMesh(const string &filename){
+        mpPointCloudMapping->SaveMeshModel(filename);
+
+    }
+
 
 } //namespace Planar_SLAM

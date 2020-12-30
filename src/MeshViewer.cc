@@ -1,22 +1,3 @@
-/*
- * <one line to give the program's name and a brief idea of what it does.>
- * Copyright (C) 2016  <copyright holder> <email>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
-
 #include "MeshViewer.h"
 #include <KeyFrame.h>
 #include <opencv2/highgui/highgui.hpp>
@@ -49,6 +30,33 @@ namespace Planar_SLAM {
     void MeshViewer::print() {
         unique_lock<mutex> lck_print(printMutex);
         printFlag = true;
+    }
+
+    void MeshViewer::SaveMeshModel(const string &filename) {
+        std::vector<Planar_SLAM::MapPlane *> PlaneMap = mMap->GetAllMapPlanes();
+        pcl::PointCloud<pcl::PointXYZ>::Ptr meshCloud(new pcl::PointCloud<pcl::PointXYZ>());
+
+        for (auto pMP : PlaneMap) {
+            int ir = pMP->mRed;
+            int ig = pMP->mGreen;
+            int ib = pMP->mBlue;
+
+
+            for (auto &planePoint : pMP->mvPlanePoints.get()->points) {
+                int i = 0;
+                pcl::PointXYZ p;
+                p.x = planePoint.x;
+                p.y = planePoint.y;
+                p.z = planePoint.z;
+                meshCloud->points.push_back(p);
+            }
+        }
+
+        if (meshCloud->points.size() > 0) {
+            pcl::PolygonMesh cloud_mesh;
+            Mesh::create_mesh(meshCloud, 2, 1, cloud_mesh);
+            Mesh::SaveMeshModel(cloud_mesh,filename);
+        }
     }
 
     void MeshViewer::viewer() {
@@ -96,7 +104,6 @@ namespace Planar_SLAM {
                     meshCloud->points.push_back(p);
                 }
 
-
                 if (meshCloud->points.size() > 0) {
                     pcl::PolygonMesh cloud_mesh;
                     string id = std::to_string(i++);
@@ -116,9 +123,9 @@ namespace Planar_SLAM {
 
             sprintf(buffer, "mesh/%06d.png", cnt++);
             meshViewer->saveScreenshot(buffer);
-
         }
     }
+
 
 }
 

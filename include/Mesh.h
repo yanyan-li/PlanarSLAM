@@ -243,12 +243,7 @@ public:
             gp3.setSearchMethod(kdtree_for_normals);
             gp3.reconstruct(triangles);
 
-            //vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
-            //pcl::PolygonMesh mesh_pcl;
-            //pcl::VTKUtils::convertToVTK(triangles,polydata);
-            //pcl::VTKUtils::convertToPCL(polydata,mesh_pcl);
 
-            //pcl::io::savePolygonFilePLY("mesh.ply", mesh_pcl);
 
 //            std::cout << "[OK]" << std::endl;
 
@@ -296,6 +291,14 @@ public:
         }
 
     }
+
+    void static SaveMeshModel(pcl::PolygonMesh& triangles, const string&filename ){
+        vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
+        pcl::PolygonMesh mesh_pcl;
+        pcl::VTKUtils::convertToVTK(triangles,polydata);
+        pcl::VTKUtils::convertToPCL(polydata,mesh_pcl);
+        pcl::io::savePolygonFilePLY(filename, mesh_pcl);
+    }
 };
 
-#endif //ORB_SLAM2_MESH_H
+#endif //Planar_SLAM

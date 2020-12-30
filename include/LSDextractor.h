@@ -1,7 +1,3 @@
-//
-// Created by yan on 18-8-2.
-//
-
 #ifndef LINESEGMENT_UTIL_H
 #define LINESEGMENT_UTIL_H
 

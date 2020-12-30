@@ -36,7 +36,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <opencv2/opencv.hpp>
-#include "../LineExtractor.h"
+#include "include/LSDextractor.h"
 
 //#define DEBUG_CLUSTER
 //#define DEBUG_CALC

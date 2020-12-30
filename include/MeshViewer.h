@@ -35,6 +35,7 @@ class Map;
         void viewer();
 
         void print();
+        void SaveMeshModel(const string &filename);
 
     protected:
         Map* mMap;

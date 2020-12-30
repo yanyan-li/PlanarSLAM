@@ -97,6 +97,9 @@ public:
     // See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset
     void SaveKeyFrameTrajectoryTUM(const string &filename);
 
+    // Save planar mesh into a ply file
+    void SaveMesh(const string &filename);
+
 
     // TODO: Save/Load functions
     // SaveMap(const string &filename);

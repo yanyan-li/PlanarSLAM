@@ -57,7 +57,8 @@ void Viewer::RunWithPLP()
         pangolin::Var<bool> menuShowGraph("menu.Show Graph",true,true);
         pangolin::Var<bool> menuVideo("menu.Save 2D Frames",false,true);
         pangolin::Var<bool> menuVideo3D("menu.Save Sparse Map",false,true);
-        pangolin::Var<bool> menuScreenshot("menu.Screenshot Current Frame",false, false);
+        pangolin::Var<bool> menuScreenshot("menu.Screenshot 2D Frame",false, false);
+        pangolin::Var<bool> menuScreenshotMesh("menu.Screenshot Mesh",false, false);
 
         pangolin::OpenGlRenderState s_cam(
                 pangolin::ProjectionMatrix(1024, 768, mViewpointF, mViewpointF, 512, 389, 0.1, 1000),
@@ -65,16 +66,12 @@ void Viewer::RunWithPLP()
         );
 
         // Add named OpenGL viewport to window and provide 3D Handler
-        // 给窗口添加视点，并提供3D操作
         pangolin::View& d_cam = pangolin::CreateDisplay()
                 .SetBounds(0.0, 1.0, pangolin::Attach::Pix(175), 1.0, -1024.0f/768.0f)
                 .SetHandler(new pangolin::Handler3D(s_cam));
 
         pangolin::OpenGlMatrix Twc;
         Twc.SetIdentity();
-
-//        cv::namedWindow("ORB-SLAM2: Current Frame");
-
         bool bFollow = true;
         bool bLocalizationMode = false;
 
@@ -128,6 +125,12 @@ void Viewer::RunWithPLP()
             if(menuScreenshot)
             {
                 cv::imwrite("Screenshot.png", im);
+                menuScreenshot = false;
+            }
+
+            if(menuScreenshotMesh)
+            {
+                mpTracker->SaveMesh("Screenshot.ply");
                 menuScreenshot = false;
             }
 

@@ -21,7 +21,7 @@
 #include <mutex>
 
 #include "auxiliar.h"
-#include "ExtractLineSegment.h"
+//#include "ExtractLineSegment.h"
 #include "MapLine.h"
 #include "LSDmatcher.h"
 #include "PlaneMatcher.h"
@@ -79,6 +79,7 @@ public:
 
     cv::Mat ClusterMultiManhattanFrame(vector<cv::Mat> &vRotationCandidate,double &clusterRatio);
     vector<vector<int>>  EasyHist(vector<float> &vDistance,int &histStart,float &histStep,int&histEnd);
+    void SaveMesh(const string &filename);
 
 public:
 
