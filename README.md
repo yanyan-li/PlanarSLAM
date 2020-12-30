@@ -1,19 +1,17 @@
 # PlanarSLAM
-This repo proposes a RGB-D SLAM system specifically designed for structured environments and aimed at improved tracking and mapping accuracy by relying on geometric features that are extracted from the surrounding. More details can be found from our papers ([RGB-D](https://arxiv.org/abs/2010.07997) and [Monocular](https://arxiv.org/abs/2008.01963)).  
+This repo proposes a RGB-D SLAM system specifically designed for structured environments and aimed at improved tracking and mapping accuracy by relying on geometric features that are extracted from the surrounding. More details can be found in our papers ([RGB-D](https://arxiv.org/abs/2010.07997) and [Monocular](https://arxiv.org/abs/2008.01963)).  
 
-*The system will be <font color=#FF0000>released at the beginning of 2021</font> for celebrating the new year.  We hope everyone has a happy time and our world will get better soon.*
+*The system will be <font color=#FF0000>released at the beginning of 2021</font> to celebrate the new year.  We hope everyone has a happy time and our world will get better soon.*
 
 **Authors:** Yanyan Li, Raza Yunus, Nikolas Brasch, Nassir Navab and Federico Tombari
 
 <img src="Examples/teaser.png"/>
 
-
-
 ## License
 
 PlanarSLAM is released under a [GPLv3 license](https://github.com/raulmur/ORB_SLAM2/blob/master/License-gpl.txt). 
 
-For commercial purposes, please contact the authors: yanyan.li (at) tum.de. If you use PlanarSLAM  in an academic work, please cite:
+For commercial purposes, please contact the authors: yanyan.li (at) tum.de. If you use PlanarSLAM in an academic work, please cite:
 
 ```
 inproceedings{Li2020SSLAM,
@@ -26,7 +24,7 @@ inproceedings{Li2020SSLAM,
 
 ## 1. Prerequisites
 
-We have tested the library in **ubuntu 16.04 and ubuntu 18.04**, but it should be easy to compile in other platforms. A powerful computer (e.g. i7) will ensure real-time performance and provide more stable and accurate results.
+We have tested the library in **ubuntu 16.04** and **ubuntu 18.04**, but it should be easy to compile on other platforms. A powerful computer (e.g. i7) will ensure real-time performance and provide more stable and accurate results.
 
 ### C++11 or C++0x Compiler
 We use the new thread and chrono functionalities of C++11.
@@ -68,9 +66,7 @@ We use [PCL](http://www.pointclouds.org/) to reconstruct and visualize mesh. Dow
 
 ### Structural Public datasets
 
-TUM RGB-D
-
-ICL NUIM
+[ICL NUIM](http://www.doc.ic.ac.uk/~ahanda/VaFRIC/iclnuim.html)
 
 
 ### Test the system locally
@@ -79,17 +75,17 @@ ICL NUIM
 ./build.sh
 ```
 
-*command for testing TUM-RGBD sequences* 
-
-```
-./Examples/RGB-D/Planar_SLAM Vocabulary/ORBvoc.txt Examples/RGB-D/TUM3.yaml PATH_TO_SEQUENCE_FOLDER .PATH_TO_SEQUENCE_FOLDER/ASSOCIATIONS_FILE
-
-```
 *command for testing ICL-NUIM sequences*
 
 ```
 ./Examples/RGB-D/Planar_SLAM Vocabulary/ORBvoc.txt Examples/RGB-D/ICL.yaml PATH_TO_SEQUENCE_FOLDER  PATH_TO_SEQUENCE_FOLDER/ASSOCIATIONS_FILE
 
+```
+
+*command for testing structural scenes in the TUM-RGBD dataset* 
+
+```
+./Examples/RGB-D/Planar_SLAM Vocabulary/ORBvoc.txt Examples/RGB-D/TUM3.yaml PATH_TO_SEQUENCE_FOLDER .PATH_TO_SEQUENCE_FOLDER/ASSOCIATIONS_FILE
 ```
 
 ----
