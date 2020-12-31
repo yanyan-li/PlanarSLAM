@@ -70,7 +70,7 @@ We use [PCL](http://www.pointclouds.org/) to reconstruct and visualize mesh. Dow
 
 ### Test the system locally
 
-1. Download **'freiburg3_structure_notexture_far'** and  associate RGB-D pairs based on [associate.py](http://vision.in.tum.de/data/datasets/rgbd-dataset/tools) provided by the dataset.
+1. Download **'freiburg3_structure_texture_far'** and  associate RGB-D pairs based on [associate.py](http://vision.in.tum.de/data/datasets/rgbd-dataset/tools) provided by the dataset.
 
    ```
    python associate.py PATH_TO_SEQUENCE/rgb.txt PATH_TO_SEQUENCE/depth.txt > associations.txt
