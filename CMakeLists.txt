@@ -79,7 +79,7 @@ add_library(${PROJECT_NAME} SHARED
         src/Initializer.cc
         src/Viewer.cc
         src/LineExtractor.cpp
-        src/ExtractLineSegment.cpp
+        src/LSDextractor.cpp
         src/LSDmatcher.cpp
         src/PlaneExtractor.cpp
         src/Config.cc
