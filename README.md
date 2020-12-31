@@ -32,7 +32,7 @@ We use the new thread and chrono functionalities of C++11.
 ### Pangolin
 We use [Pangolin](https://github.com/stevenlovegrove/Pangolin) for visualization and user interface. Dowload and install instructions can be found at: https://github.com/stevenlovegrove/Pangolin.
 
-### OpenCV
+### OpenCV and **OpenCV_Contrib**
 We use [OpenCV](http://opencv.org) and corresponding **OpenCV_Contrib** to manipulate images and features. Dowload and install instructions can be found at: http://opencv.org. **Tested with OpenCV 3.4.1**
 
 ### Eigen3
