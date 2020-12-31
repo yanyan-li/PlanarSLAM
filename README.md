@@ -64,29 +64,38 @@ We use [PCL](http://www.pointclouds.org/) to reconstruct and visualize mesh. Dow
 
 ## 2. Test the system
 
-### Structural Public datasets
+### Structural Public Scenes
 
-[ICL NUIM](http://www.doc.ic.ac.uk/~ahanda/VaFRIC/iclnuim.html)
-
+[ICL NUIM](http://www.doc.ic.ac.uk/~ahanda/VaFRIC/iclnuim.html), [Structural TUM RGB-D](https://vision.in.tum.de/data/datasets/rgbd-dataset/download), All types of Corridors
 
 ### Test the system locally
+
+1. Download **'freiburg3_structure_notexture_far'** and  associate RGB-D pairs based on [associate.py](http://vision.in.tum.de/data/datasets/rgbd-dataset/tools) provided by the dataset.
+
+   ```
+   python associate.py PATH_TO_SEQUENCE/rgb.txt PATH_TO_SEQUENCE/depth.txt > associations.txt
+   ```
+
+2. Compile the system
 
 ```
 ./build.sh
 ```
 
-*command for testing ICL-NUIM sequences*
+​	3.  Run the system
+
+```
+./Examples/RGB-D/Planar_SLAM Vocabulary/ORBvoc.txt Examples/RGB-D/TUM3.yaml PATH_TO_SEQUENCE_FOLDER .PATH_TO_SEQUENCE_FOLDER/ASSOCIATIONS_FILE
+```
+
+*similar command for testing ICL-NUIM sequences*
 
 ```
 ./Examples/RGB-D/Planar_SLAM Vocabulary/ORBvoc.txt Examples/RGB-D/ICL.yaml PATH_TO_SEQUENCE_FOLDER  PATH_TO_SEQUENCE_FOLDER/ASSOCIATIONS_FILE
 
 ```
 
-*command for testing structural scenes in the TUM-RGBD dataset* 
 
-```
-./Examples/RGB-D/Planar_SLAM Vocabulary/ORBvoc.txt Examples/RGB-D/TUM3.yaml PATH_TO_SEQUENCE_FOLDER .PATH_TO_SEQUENCE_FOLDER/ASSOCIATIONS_FILE
-```
 
 ----
 
