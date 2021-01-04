@@ -1,8 +1,6 @@
 # PlanarSLAM
 This repo proposes a RGB-D SLAM system specifically designed for structured environments and aimed at improved tracking and mapping accuracy by relying on geometric features that are extracted from the surrounding. More details can be found in our papers ([RGB-D](https://arxiv.org/abs/2010.07997) and [Monocular](https://arxiv.org/abs/2008.01963)).  
 
-*The system will be <font color=#FF0000>released at the beginning of 2021</font> to celebrate the new year.  We hope everyone has a happy time and our world will get better soon.*
-
 **Authors:** Yanyan Li, Raza Yunus, Nikolas Brasch, Nassir Navab and Federico Tombari
 
 <img src="Examples/teaser.png"/>
