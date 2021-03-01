@@ -12,11 +12,11 @@ PlanarSLAM is released under a [GPLv3 license](https://github.com/raulmur/ORB_SL
 For commercial purposes, please contact the authors: yanyan.li (at) tum.de. If you use PlanarSLAM in an academic work, please cite:
 
 ```
-inproceedings{Li2020PlanarSLAM,
+inproceedings{Li2021PlanarSLAM,
   author = {Li, Yanyan and Yunus, Raza and Brasch, Nikolas and Navab, Nassir and Tombari, Federico},
   title = {RGB-D SLAM with Structural Regularities},
-  year = {2020},
-  booktitle = {arXiv:2010.07997},
+  year = {2021},
+  booktitle = {2021 IEEE international conference on Robotics and automation (ICRA)},
  }
 ```
 
@@ -99,11 +99,11 @@ We use [PCL](http://www.pointclouds.org/) to reconstruct and visualize mesh. Dow
 
 ## Citation
 ```
-inproceedings{PlanarSLAM,
+inproceedings{Li2021PlanarSLAM,
   author = {Li, Yanyan and Yunus, Raza and Brasch, Nikolas and Navab, Nassir and Tombari, Federico},
   title = {RGB-D SLAM with Structural Regularities},
-  year = {2020},
-  booktitle = {arXiv:2010.07997},
+  year = {2021},
+  booktitle = {2021 IEEE international conference on Robotics and automation (ICRA)},
  }
 ```
 ```
