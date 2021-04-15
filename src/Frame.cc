@@ -711,7 +711,7 @@ namespace Planar_SLAM {
         inputCloud->height = ceil(imDepth.rows/3.0);
         inputCloud->width = ceil(imDepth.cols/3.0);
 
-        //估计法线
+        //compute normals
         pcl::IntegralImageNormalEstimation<PointT, pcl::Normal> ne;
         pcl::PointCloud<pcl::Normal>::Ptr cloud_normals(new pcl::PointCloud<pcl::Normal>);
         ne.setNormalEstimationMethod(ne.AVERAGE_3D_GRADIENT);
@@ -719,6 +719,12 @@ namespace Planar_SLAM {
         ne.setNormalSmoothingSize(10.0f);
         ne.setInputCloud(inputCloud);
         //计算特征值
+
+        if (inputCloud->size()== 0)
+        {
+            PCL_ERROR ("Could not estimate a planar model for the given initial plane.\n");
+            return;
+        }
         ne.compute(*cloud_normals);
 
         for ( int m=0; m<inputCloud->height; m+=1 ) {
