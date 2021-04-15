@@ -110,6 +110,9 @@ namespace Planar_SLAM
         void EstimateVanihsingDirection();
 
         cv::Mat ComputePlaneWorldCoeff(const int &idx);
+
+        // remove useless planes
+        bool MaxPointDistanceFromPlane(cv::Mat &plane, PointCloud::Ptr pointCloud);
     public:
         // Vocabulary used for relocalization.
         ORBVocabulary* mpORBvocabulary;

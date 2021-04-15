@@ -678,9 +678,16 @@ namespace Planar_SLAM {
             voxel.setInputCloud(inputCloud);
             voxel.filter(*coarseCloud);
 
+            cv::Mat coef = (cv::Mat_<float>(4, 1) << nx, ny, nz, d);
+
+            bool valid = MaxPointDistanceFromPlane(coef, coarseCloud);
+
+            if (!valid) {
+                continue;
+            }
+
             mvPlanePoints.push_back(*coarseCloud);
 
-            cv::Mat coef = (cv::Mat_<float>(4, 1) << nx, ny, nz, d);
             mvPlaneCoefficients.push_back(coef);
         }
 
@@ -703,7 +710,6 @@ namespace Planar_SLAM {
         }
         inputCloud->height = ceil(imDepth.rows/3.0);
         inputCloud->width = ceil(imDepth.cols/3.0);
-
 
         //估计法线
         pcl::IntegralImageNormalEstimation<PointT, pcl::Normal> ne;
@@ -738,54 +744,66 @@ namespace Planar_SLAM {
 
         vSurfaceNormal = surfaceNormals;
 
+    }
 
-//        int min_plane = Config::Get<int>("Plane.MinSize");
-//        float AngTh = Config::Get<float>("Plane.AngleThreshold");
-//        float DisTh = Config::Get<float>("Plane.DistanceThreshold");
-//
-//        vector<pcl::ModelCoefficients> coefficients;
-//        vector<pcl::PointIndices> inliers;
-//        pcl::PointCloud<pcl::Label>::Ptr labels ( new pcl::PointCloud<pcl::Label> );
-//        vector<pcl::PointIndices> label_indices;
-//        vector<pcl::PointIndices> boundary;
-//
-//        pcl::OrganizedMultiPlaneSegmentation< PointT, pcl::Normal, pcl::Label > mps;
-//        mps.setMinInliers (min_plane);
-//        mps.setAngularThreshold (0.017453 * AngTh);
-//        mps.setDistanceThreshold (DisTh);
-//        mps.setInputNormals (cloud_normals);
-//        mps.setInputCloud (inputCloud);
-//        std::vector<pcl::PlanarRegion<PointT>, Eigen::aligned_allocator<pcl::PlanarRegion<PointT>>> regions;
-//        mps.segmentAndRefine (regions, coefficients, inliers, labels, label_indices, boundary);
-//
-//
-//        pcl::ExtractIndices<PointT> extract;
-//        extract.setInputCloud(inputCloud);
-//        extract.setNegative(false);
-//
-//        for (int i = 0; i < inliers.size(); ++i) {
-//            PointCloud::Ptr planeCloud(new PointCloud());
-//            extract.setIndices(boost::make_shared<pcl::PointIndices>(inliers[i]));
-//            extract.filter(*planeCloud);
-////            mvPlanePoints.push_back(*planeCloud);
-//
-//            pcl::VoxelGrid<PointT> voxel;
-//            voxel.setLeafSize(0.2, 0.2, 0.2);
-//
-//            PointCloud::Ptr coarseCloud(new PointCloud());
-//            voxel.setInputCloud(planeCloud);
-//            voxel.filter(*coarseCloud);
-//
-////            PointCloud::Ptr boundaryPoints(new PointCloud());
-////            boundaryPoints->points = regions[i].getContour();
-//            mvPlanePoints.push_back(*coarseCloud);
-//
-//            cv::Mat coef = (cv::Mat_<float>(4,1) << coefficients[i].values[0],
-//                    coefficients[i].values[1],
-//                    coefficients[i].values[2],
-//                    coefficients[i].values[3]);
-//            mvPlaneCoefficients.push_back(coef);
+    bool Frame::MaxPointDistanceFromPlane(cv::Mat &plane, PointCloud::Ptr pointCloud) {
+        auto disTh = Config::Get<double>("Plane.DistanceThreshold");
+        bool erased = false;
+//        double max = -1;
+        double threshold = 0.04;
+        int i = 0;
+        auto &points = pointCloud->points;
+//        std::cout << "points before: " << points.size() << std::endl;
+        for (auto &p : points) {
+            double absDis = abs(plane.at<float>(0) * p.x +
+                                plane.at<float>(1) * p.y +
+                                plane.at<float>(2) * p.z +
+                                plane.at<float>(3));
+
+            if (absDis > disTh)
+                return false;
+            i++;
+        }
+
+        pcl::ModelCoefficients::Ptr coefficients(new pcl::ModelCoefficients);
+        pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
+        // Create the segmentation object
+        pcl::SACSegmentation<PointT> seg;
+        // Optional
+        seg.setOptimizeCoefficients(true);
+        // Mandatory
+        seg.setModelType(pcl::SACMODEL_PLANE);
+        seg.setMethodType(pcl::SAC_RANSAC);
+        seg.setDistanceThreshold(disTh);
+
+        seg.setInputCloud(pointCloud);
+        seg.segment(*inliers, *coefficients);
+        if (inliers->indices.size () == 0)
+        {
+            PCL_ERROR ("Could not estimate a planar model for the given initial plane.\n");
+            return false;
+        }
+
+        float oldVal = plane.at<float>(3);
+        float newVal = coefficients->values[3];
+
+        cv::Mat oldPlane = plane.clone();
+
+
+        plane.at<float>(0) = coefficients->values[0];
+        plane.at<float>(1) = coefficients->values[1];
+        plane.at<float>(2) = coefficients->values[2];
+        plane.at<float>(3) = coefficients->values[3];
+
+        if ((newVal < 0 && oldVal > 0) || (newVal > 0 && oldVal < 0)) {
+            plane = -plane;
+//                double dotProduct = plane.dot(oldPlane) / sqrt(plane.dot(plane) * oldPlane.dot(oldPlane));
+//                std::cout << "Flipped plane: " << plane.t() << std::endl;
+//                std::cout << "Flip plane: " << dotProduct << std::endl;
+        }
 //        }
+
+        return true;
     }
 
     cv::Mat Frame::ComputePlaneWorldCoeff(const int &idx) {
