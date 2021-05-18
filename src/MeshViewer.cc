@@ -34,23 +34,52 @@ namespace Planar_SLAM {
 
     void MeshViewer::SaveMeshModel(const string &filename) {
         std::vector<Planar_SLAM::MapPlane *> PlaneMap = mMap->GetAllMapPlanes();
+
         pcl::PointCloud<pcl::PointXYZ>::Ptr meshCloud(new pcl::PointCloud<pcl::PointXYZ>());
 
+        // 在
+        //std::ofstream planes("planePC.txt");
+        int num =0;
         for (auto pMP : PlaneMap) {
-            int ir = pMP->mRed;
-            int ig = pMP->mGreen;
-            int ib = pMP->mBlue;
 
+            // obtain parameters of the plane
+            //pMP->GetWorldPos();
+            cv::Mat parameter = pMP->GetWorldPos();
+            float nx = parameter.at<float>(0,0);
+            float ny = parameter.at<float>(1,0);
+            float nz = parameter.at<float>(2,0);
+            float d = parameter.at<float>(3,0);
 
+            pcl::PointCloud<pcl::PointXYZ>::Ptr meshCloud_part(new pcl::PointCloud<pcl::PointXYZ>());
             for (auto &planePoint : pMP->mvPlanePoints.get()->points) {
-                int i = 0;
+
+                double tempx = planePoint.x;  double tempy =planePoint.y; double tempz =planePoint.z;
+                double distance = d+nx*tempx+nz*tempz+ny*tempy;
+
+                //int i = 0;
                 pcl::PointXYZ p;
-                p.x = planePoint.x;
-                p.y = planePoint.y;
-                p.z = planePoint.z;
+                //cout<<nx*distance<<", "<<ny*distance<<", "<<nz*distance<<endl;
+                // outliers
+                if(nx*distance>0.1||ny*distance>0.1||nz*distance>0.1)
+                    continue;
+                p.x = planePoint.x-nx*distance;
+                p.y = planePoint.y-ny*distance;
+                p.z = planePoint.z-nz*distance;
                 meshCloud->points.push_back(p);
+                meshCloud_part->points.push_back(p);
+                //planes << p.x<<" "<<p.y<<" "<<p.z<<" "<<ir<<" "<<ig<<" "<<ib<<endl;  //把字符串内容"This is a Test!"，写入Test.txt文件
             }
+
+            // draw each instance
+            if (meshCloud_part->points.size() > 0&&false) {
+                pcl::PolygonMesh cloud_mesh;
+                Mesh::create_mesh(meshCloud_part, 2, 1, cloud_mesh);
+                Mesh::SaveMeshModel(cloud_mesh,to_string(num)+filename);
+            }
+            num++;
         }
+
+        //planes.close();
 
         if (meshCloud->points.size() > 0) {
             pcl::PolygonMesh cloud_mesh;
@@ -94,13 +123,33 @@ namespace Planar_SLAM {
                 int ig = pMP->mGreen;
                 int ib = pMP->mBlue;
 
+                cv::Mat parameter = pMP->GetWorldPos();
+                float nx = parameter.at<float>(0,0);
+                float ny = parameter.at<float>(1,0);
+                float nz = parameter.at<float>(2,0);
+                float d = parameter.at<float>(3,0);
+
                 pcl::PointCloud<pcl::PointXYZ>::Ptr meshCloud(new pcl::PointCloud<pcl::PointXYZ>());
                 for(auto& planePoint : pMP->mvPlanePoints.get()->points){
-                    int i = 0;
+
+                    double tempx = planePoint.x;  double tempy =planePoint.y; double tempz =planePoint.z;
+                    double distance = d+nx*tempx+nz*tempz+ny*tempy;
+
+                    //int i = 0;
                     pcl::PointXYZ p;
-                    p.x = planePoint.x;
-                    p.y = planePoint.y;
-                    p.z = planePoint.z;
+                    //cout<<nx*distance<<", "<<ny*distance<<", "<<nz*distance<<endl;
+                    // outliers
+                    if(nx*distance>0.1||ny*distance>0.1||nz*distance>0.1)
+                        continue;
+                    p.x = planePoint.x-nx*distance;
+                    p.y = planePoint.y-ny*distance;
+                    p.z = planePoint.z-nz*distance;
+                    //int i = 0;
+//                    pcl::PointXYZ p;
+//                    p.x = planePoint.x;
+//                    p.y = planePoint.y;
+//                    p.z = planePoint.z;
+
                     meshCloud->points.push_back(p);
                 }
 

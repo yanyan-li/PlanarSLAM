@@ -96,11 +96,11 @@ int main(int argc, char **argv)
     }
     char bStop;
 
-    cerr << "PlanarSLAM Printer: Please type 'x', if you want to shutdown windows." << endl;
-
-    while (bStop != 'x'){
-        bStop = getchar();
-    }
+//    cerr << "PlanarSLAM Printer: Please type 'x', if you want to shutdown windows." << endl;
+//
+//    while (bStop != 'x'){
+//        bStop = getchar();
+//    }
     // Stop all threads
     SLAM.Shutdown();
 
@@ -118,6 +118,7 @@ int main(int argc, char **argv)
     // Save camera trajectory
     SLAM.SaveTrajectoryTUM("CameraTrajectory.txt");
     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
+    SLAM.SaveMesh("MeshMap.ply");
 
     return 0;
 }
