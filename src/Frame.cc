@@ -672,7 +672,7 @@ namespace Planar_SLAM {
             float d = (float) -(nx * cx + ny * cy + nz * cz);
 
             pcl::VoxelGrid<PointT> voxel;
-            voxel.setLeafSize(0.2, 0.2, 0.2);
+            voxel.setLeafSize(0.05, 0.05, 0.05);
 
             PointCloud::Ptr coarseCloud(new PointCloud());
             voxel.setInputCloud(inputCloud);
