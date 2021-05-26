@@ -117,45 +117,51 @@ public:
     void static create_mesh(pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud, int surface_mode, int normal_method, pcl::PolygonMesh& triangles){
 
          /* ****Translated point cloud to origin**** */
-        // 2,1
+//        std::cout<<"begin smooth: size " << cloud->size() << std::endl;
+//        pcl::search::KdTree<pcl::PointXYZ>::Ptr treeSampling(new pcl::search::KdTree<pcl::PointXYZ>); // 创建用于最近邻搜索的KD-Tree
+//        pcl::MovingLeastSquares<pcl::PointXYZ, pcl::PointXYZ> mls;  // 定义最小二乘实现的对象mls
+//        mls.setSearchMethod(treeSampling);    // 设置KD-Tree作为搜索方法
+//        mls.setComputeNormals(false);  //设置在最小二乘计算中是否需要存储计算的法线
+//        mls.setInputCloud(cloud);        //设置待处理点云
+//        mls.setPolynomialOrder(1);             // 拟合2阶多项式拟合
+//        mls.setPolynomialFit(false);  // 设置为false可以 加速 smooth
+//        mls.setSearchRadius(0.5); // 单位m.设置用于拟合的K近邻半径
+//        pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_out(new pcl::PointCloud<pcl::PointXYZ>);
+//        mls.process(*cloud_out);        //输出
+//        std::cout << "success smooth, size: " << cloud_out->size() << std::endl;
 
 
-        pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normalEstimation;                   
-        normalEstimation.setInputCloud(cloud);                                    
-        pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);          
+
+        pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normalEstimation;
+        pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
+        normalEstimation.setInputCloud(cloud);
         normalEstimation.setSearchMethod(tree);
-        pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);     
 
-        normalEstimation.setKSearch(10);                    
-        //normalEstimation.setRadiusSearch(0.3);            
+        normalEstimation.setViewPoint(0,0,0);
+        normalEstimation.setKSearch(8);
+        pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);     // 定义输出的点云法线
+        //normalEstimation.setRadiusSearch(0.3);
         normalEstimation.compute(*normals);
-
-
-
-
-        pcl::StopWatch time;
 
         std::cout << "begin  mesh..." << std::endl;
 
         pcl::PointCloud<pcl::PointNormal>::Ptr cloud_with_normals(new pcl::PointCloud<pcl::PointNormal>);
         pcl::concatenateFields(*cloud, *normals, *cloud_with_normals);
-
-        
         pcl::search::KdTree<pcl::PointNormal>::Ptr tree2(new pcl::search::KdTree<pcl::PointNormal>);
         tree2->setInputCloud(cloud_with_normals);
+        pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;   //
 
-        // 
-        pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;   // 
-
-        gp3.setSearchRadius(0.1);  
-        gp3.setMu(2.5);  
-        gp3.setMaximumNearestNeighbors(100);    
-
-        gp3.setNormalConsistency(false);  
-
-        gp3.setInputCloud(cloud_with_normals);     
-        gp3.setSearchMethod(tree2);   //
-        gp3.reconstruct(triangles);  //
+        float search_radius = 20;
+        float setMU = 5;
+        int maxiNearestNeighbors = 100;
+        bool normalConsistency = false;
+        gp3.setSearchRadius(search_radius);//It was 0.025
+        gp3.setMu(setMU); //It was 2.5
+        gp3.setMaximumNearestNeighbors(maxiNearestNeighbors);    //It was 100
+        gp3.setNormalConsistency(normalConsistency); //It was false
+        gp3.setInputCloud(cloud_with_normals);
+        gp3.setSearchMethod(tree2);
+        gp3.reconstruct(triangles);
     }
 
 
