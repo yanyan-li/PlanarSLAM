@@ -3,7 +3,7 @@ This repo proposes a RGB-D SLAM system specifically designed for structured envi
 
 **Authors:** Yanyan Li, Raza Yunus, Nikolas Brasch, Nassir Navab and Federico Tombari
 
-<img src="Examples/ICRA21-teasear.png"/>
+<a href="https://www.youtube.com/watch?v=zvmnCFIp58U"><img src="Examples/ICRA21-teasear.png"/></a>
 
 ## License
 
