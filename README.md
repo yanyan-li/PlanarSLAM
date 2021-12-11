@@ -3,6 +3,18 @@ This repo proposes a RGB-D SLAM system specifically designed for structured envi
 
 **Authors:** Yanyan Li, Raza Yunus, Nikolas Brasch, Nassir Navab and Federico Tombari
 
+### updated on 11.12.2021
+
+We updated the planar meshing section by making use of a more efficient triangulation method, rather than the greedy algorithm from PCL. If the PCL window shows nothing, maybe you could click "R" after selecting the window. 
+
+ps: the reconstruction method is still very naive, we will keep moving.
+
+![planarReconstruction](Examples/planarReconstruction.png)
+
+----
+
+
+
 <a href="https://www.youtube.com/watch?v=zvmnCFIp58U"><img src="Examples/ICRA21-teasear.png"/></a>
 
 ## License
