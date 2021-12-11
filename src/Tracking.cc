@@ -176,13 +176,29 @@ namespace Planar_SLAM {
 
         mCurrentFrame = Frame(mImRGB, mImGray, mImDepth, timestamp, mpORBextractorLeft, mpORBVocabulary, mK,
                               mDistCoef, mbf, mThDepth, mDepthMapFactor);
+        std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
+
+
+        Track();
 
         std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
-
         double t12= std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1).count();
-        Track();
-        std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
-        double t32= std::chrono::duration_cast<std::chrono::duration<double> >(t3 - t2).count();
+        double featureT = std::chrono::duration_cast<std::chrono::duration<double> >(t3 - t1).count();
+        double trackT = getTrackTime();
+
+        std::ofstream fileWrite12("total_plp.txt", std::ios::app);
+        std::ofstream fileWriteTrack("Track_plp.txt", std::ios::app);
+        std::ofstream fileWriteFeature("Feature_plp.txt", std::ios::app);
+        fileWrite12<<t12<<endl;
+        fileWriteTrack<<trackT<<endl;
+        fileWriteFeature<<featureT<<endl;
+        //fileWrite12.write((char*) &trackT, sizeof(double));
+        fileWrite12.close();
+        fileWriteTrack.close();
+        fileWriteFeature.close();
+
+//        std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
+//        double t32= std::chrono::duration_cast<std::chrono::duration<double> >(t3 - t2).count();
         return mCurrentFrame.mTcw.clone();
     }
 
@@ -192,6 +208,11 @@ namespace Planar_SLAM {
         if (mState == NO_IMAGES_YET) {
             mState = NOT_INITIALIZED;
         }
+
+        double ttrack_12 = 0.0;
+        double ttrack_34 = 0.0;
+        trackTime = 0.0;
+        std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 
         mLastProcessedState = mState;
 
@@ -349,10 +370,20 @@ namespace Planar_SLAM {
                 }
                 mlpTemporalPoints.clear();
                 mlpTemporalLines.clear();
+
+                std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
+
+
                 // Check if we need to insert a new keyframe
                 if (NeedNewKeyFrame()) {
                     CreateNewKeyFrame();
                 }
+
+                std::chrono::steady_clock::time_point t4 = std::chrono::steady_clock::now();
+
+                ttrack_34= std::chrono::duration_cast<std::chrono::duration<double> >(t4 - t3).count();
+
+
                 // We allow points with high innovation (considererd outliers by the Huber Function)
                 // pass to the new keyframe, so that bundle adjustment will finally decide
                 // if they are outliers or not. We don't want next frame to estimate its position
@@ -382,6 +413,12 @@ namespace Planar_SLAM {
             mLastFrame = Frame(mCurrentFrame);
         }
 
+        std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+
+        ttrack_12= std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1).count();
+
+        trackTime = ttrack_12 - ttrack_34;
+
         // Store frame pose information to retrieve the complete camera trajectory afterwards.
         if (!mCurrentFrame.mTcw.empty()) {
             cv::Mat Tcr = mCurrentFrame.mTcw * mCurrentFrame.mpReferenceKF->GetPoseInverse();
@@ -397,6 +434,12 @@ namespace Planar_SLAM {
             mlbLost.push_back(mState == LOST);
         }
 
+    }
+
+
+    double Tracking::getTrackTime()
+    {
+        return trackTime;
     }
 
     cv::Mat
@@ -2732,6 +2775,7 @@ namespace Planar_SLAM {
     }
 
     void Tracking::SaveMesh(const string &filename){
+        //
         mpPointCloudMapping->SaveMeshModel(filename);
 
     }

@@ -309,7 +309,7 @@ namespace Planar_SLAM{
         }
 
         pcl::VoxelGrid<PointT>  voxel;
-        voxel.setLeafSize( 0.05, 0.05, 0.05);
+        voxel.setLeafSize( 0.1, 0.1, 0.1);
 
         PointCloud::Ptr coarseCloud(new PointCloud());
         voxel.setInputCloud(combinedPoints);
@@ -343,7 +343,7 @@ namespace Planar_SLAM{
         *combinedPoints += *mvPlanePoints;
 
         pcl::VoxelGrid<PointT>  voxel;
-        voxel.setLeafSize( 0.05, 0.05, 0.05);
+        voxel.setLeafSize( 0.1, 0.1, 0.1);
 
         PointCloud::Ptr coarseCloud(new PointCloud());
         voxel.setInputCloud(combinedPoints);

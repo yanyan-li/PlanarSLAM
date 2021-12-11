@@ -67,10 +67,25 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Thirdparty/triangle/triangle.h"
 
 class Mesh {
 
 public:
+    float static distance(cv::Point3f &P1, cv::Point3f &P2, cv::Point3f &P3, float threshold)
+    {
+       float d1 =  sqrt((P1.x-P2.x)*(P1.x-P2.x)+ (P1.y-P2.y)*(P1.y-P2.y)+ (P1.z-P2.z)*(P1.z-P2.z));
+       float d2 =  sqrt((P1.x-P3.x)*(P1.x-P3.x)+ (P1.y-P3.y)*(P1.y-P3.y)+ (P1.z-P3.z)*(P1.z-P3.z));
+       float d3 =  sqrt((P3.x-P2.x)*(P3.x-P2.x)+ (P3.y-P2.y)*(P3.y-P2.y)+ (P3.z-P2.z)*(P3.z-P2.z));
+
+       if(d1>threshold||d2>threshold||d3>threshold)
+       {
+           return -1;
+       }
+
+        return (d1+d2+d3)/3;
+    }
+
     void static visualizeMesh(pcl::PointCloud<pcl::PointXYZRGB>::Ptr & cloud,pcl::PolygonMesh &mesh){
 
         boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("MAP3D MESH"));
@@ -114,24 +129,95 @@ public:
         }
     }
 
+    void static create_mesh_tri(pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud, pcl::PolygonMesh& triangles)
+    {
+        triangulateio in, out;
+        // inputs
+        in.numberofpoints = cloud->points.size();
+        in.pointlist = (float *)malloc(in.numberofpoints * 2 * sizeof(float));
+        int32_t k = 0;
+        for (auto &p : cloud->points)
+        {
+            in.pointlist[k++] = p.x;
+            in.pointlist[k++] = p.y;
+        }
+        in.numberofpointattributes = 0;
+        in.pointattributelist = nullptr;
+        in.pointmarkerlist = nullptr;
+        in.numberofholes = 0;
+        in.holelist = nullptr;
+        in.numberofregions = 0;
+        in.regionlist = nullptr;
+        // outputs
+        out.pointlist = nullptr;
+        out.pointattributelist = nullptr;
+        out.pointmarkerlist = nullptr;
+        out.trianglelist = nullptr;
+        out.triangleattributelist = nullptr;
+        out.neighborlist = nullptr;
+        out.segmentlist = nullptr;
+        out.segmentmarkerlist = nullptr;
+        out.edgelist = nullptr;
+        out.edgemarkerlist = nullptr;
+
+        // char parameters[] = "pnezcQ";
+        char parameters[] = "zVQ";
+        triangulate(parameters, &in, &out, nullptr);
+
+        pcl::toPCLPointCloud2(*cloud, triangles.cloud);
+        k = 0;
+
+        float averageDistance = 0;
+        int i =0;
+
+//        //double
+//        for (int index = 0; index < out.numberoftriangles; ++index)
+//        {
+//            cv::Point3f P1 = cv::Point3f(cloud->points[ out.trianglelist[k]].x, cloud->points[ out.trianglelist[k]].y, cloud->points[ out.trianglelist[k]].y );
+//            cv::Point3f P2 = cv::Point3f(cloud->points[ out.trianglelist[k+1]].x, cloud->points[ out.trianglelist[k+1]].y, cloud->points[ out.trianglelist[k+1]].y );
+//            cv::Point3f P3 = cv::Point3f(cloud->points[ out.trianglelist[k+2]].x, cloud->points[ out.trianglelist[k+2]].y, cloud->points[ out.trianglelist[k+2]].y );
+//            float goodTriangl = distance(P1, P2,P3,0.25);
+//
+//            cout<< goodTriangl<<endl;
+//            if(goodTriangl>0)
+//            {
+//                averageDistance += goodTriangl;
+//                i++;
+//
+//            }
+//        }
+//
+//        if(i>0)
+//        {
+//            averageDistance /= i;
+//            cout<< "here "<< averageDistance<<endl;
+//        }
+
+        for (int index = 0; index < out.numberoftriangles; ++index)
+        {
+            pcl::Vertices vtx;
+
+            cv::Point3f P1 = cv::Point3f(cloud->points[ out.trianglelist[k]].x, cloud->points[ out.trianglelist[k]].y, cloud->points[ out.trianglelist[k]].y );
+            cv::Point3f P2 = cv::Point3f(cloud->points[ out.trianglelist[k+1]].x, cloud->points[ out.trianglelist[k+1]].y, cloud->points[ out.trianglelist[k+1]].y );
+            cv::Point3f P3 = cv::Point3f(cloud->points[ out.trianglelist[k+2]].x, cloud->points[ out.trianglelist[k+2]].y, cloud->points[ out.trianglelist[k+2]].y );
+            float goodTriangl = distance(P1, P2,P3, 0.25);
+            if(goodTriangl>0)
+                vtx.vertices.push_back(out.trianglelist[k]); // trianglelist为vertex的索引，一次索引3个就是组成一个三角面片
+            k++;
+            if(goodTriangl>0)
+                vtx.vertices.push_back(out.trianglelist[k]);
+            k++;
+            if(goodTriangl>0)
+                vtx.vertices.push_back(out.trianglelist[k]);
+            k++;
+
+            //<<endl<<out.edgelist[k]<<endl;
+            if(goodTriangl>0)
+                triangles.polygons.push_back(vtx);
+        }
+    }
+
     void static create_mesh(pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud, int surface_mode, int normal_method, pcl::PolygonMesh& triangles){
-
-         /* ****Translated point cloud to origin**** */
-//        std::cout<<"begin smooth: size " << cloud->size() << std::endl;
-//        pcl::search::KdTree<pcl::PointXYZ>::Ptr treeSampling(new pcl::search::KdTree<pcl::PointXYZ>); // 创建用于最近邻搜索的KD-Tree
-//        pcl::MovingLeastSquares<pcl::PointXYZ, pcl::PointXYZ> mls;  // 定义最小二乘实现的对象mls
-//        mls.setSearchMethod(treeSampling);    // 设置KD-Tree作为搜索方法
-//        mls.setComputeNormals(false);  //设置在最小二乘计算中是否需要存储计算的法线
-//        mls.setInputCloud(cloud);        //设置待处理点云
-//        mls.setPolynomialOrder(1);             // 拟合2阶多项式拟合
-//        mls.setPolynomialFit(false);  // 设置为false可以 加速 smooth
-//        mls.setSearchRadius(0.5); // 单位m.设置用于拟合的K近邻半径
-//        pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_out(new pcl::PointCloud<pcl::PointXYZ>);
-//        mls.process(*cloud_out);        //输出
-//        std::cout << "success smooth, size: " << cloud_out->size() << std::endl;
-
-
-
         pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normalEstimation;
         pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
         normalEstimation.setInputCloud(cloud);
@@ -139,7 +225,7 @@ public:
 
         normalEstimation.setViewPoint(0,0,0);
         normalEstimation.setKSearch(8);
-        pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);     // 定义输出的点云法线
+        pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);
         //normalEstimation.setRadiusSearch(0.3);
         normalEstimation.compute(*normals);
 
@@ -163,6 +249,8 @@ public:
         gp3.setSearchMethod(tree2);
         gp3.reconstruct(triangles);
     }
+
+
 
 
 

@@ -109,8 +109,8 @@ namespace Planar_SLAM
         if(vpMPs.empty())
             return;
         glPointSize(mPointSize*2);
-        glBegin(GL_POINTS);
-
+        //glBegin(GL_POINTS);
+        //glBegin(GL_TRIANGLES);
         for(auto pMP : vpMPs){
             float ir = pMP->mRed;
             float ig = pMP->mGreen;
@@ -118,6 +118,7 @@ namespace Planar_SLAM
             float norm = sqrt(ir*ir + ig*ig + ib*ib);
             glColor3f(ir/norm, ig/norm, ib/norm);
 
+            glBegin(GL_POINTS);
             cv::Mat pos(4,1,CV_32F);
             for(auto& p : pMP->mvPlanePoints.get()->points){
                 pos.at<float>(0) = p.x;
@@ -127,8 +128,10 @@ namespace Planar_SLAM
 
                 glVertex3f(pos.at<float>(0),pos.at<float>(1),pos.at<float>(2));
             }
+            glDisable(GL_LIGHTING);
+            glEnd();
         }
-        glEnd();
+
     }
 
     void MapDrawer::DrawKeyFrames(const bool bDrawKF, const bool bDrawGraph)

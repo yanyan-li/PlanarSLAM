@@ -137,6 +137,9 @@ public:
 
     shared_ptr<MeshViewer>  mpPointCloudMapping;
 
+    double getTrackTime();
+    double trackTime;
+
 protected:
 
     // Main tracking function. It is independent of the input sensor.

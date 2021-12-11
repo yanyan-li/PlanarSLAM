@@ -84,7 +84,9 @@ namespace Planar_SLAM {
         if (meshCloud->points.size() > 0) {
             pcl::PolygonMesh cloud_mesh;
             Mesh::create_mesh(meshCloud, 2, 1, cloud_mesh);
-            Mesh::SaveMeshModel(cloud_mesh,filename);
+            if(cloud_mesh.polygons.size()>0)
+                Mesh::SaveMeshModel(cloud_mesh,filename);
+
         }
     }
 
@@ -101,7 +103,6 @@ namespace Planar_SLAM {
                 if (shutDownFlag) {
                     break;
                 }
-
             }
 
             {
@@ -149,14 +150,18 @@ namespace Planar_SLAM {
 //                    p.x = planePoint.x;
 //                    p.y = planePoint.y;
 //                    p.z = planePoint.z;
-
                     meshCloud->points.push_back(p);
                 }
 
-                if (meshCloud->points.size() > 0) {
+
+                if (meshCloud->points.size() >6) {
                     pcl::PolygonMesh cloud_mesh;
                     string id = std::to_string(i++);
-                    Mesh::create_mesh(meshCloud, 2, 1, cloud_mesh);
+
+                    if(false)
+                        Mesh::create_mesh(meshCloud, 2, 1, cloud_mesh);
+                    else
+                        Mesh::create_mesh_tri(meshCloud,cloud_mesh);
                     meshViewer->addPolygonMesh(cloud_mesh, id);
                     meshViewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,(float)ir/256, (float)ig/256,(float)ib/256,id);
 
