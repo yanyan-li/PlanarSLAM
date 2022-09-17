@@ -3,12 +3,7 @@ using namespace std;
 using namespace cv;
 using namespace Eigen;
 
-PlaneDetection::PlaneDetection()
-{
-	cloud.vertices.resize(kDepthHeight * kDepthWidth);
-	cloud.w = kDepthWidth;
-	cloud.h = kDepthHeight;
-}
+PlaneDetection::PlaneDetection() { }
 
 PlaneDetection::~PlaneDetection()
 {
@@ -28,8 +23,13 @@ bool PlaneDetection::readColorImage(cv::Mat RGBImg)
 	return true;
 }
 
-bool PlaneDetection::readDepthImage(cv::Mat depthImg, cv::Mat &K)
+bool PlaneDetection::readDepthImage(cv::Mat depthImg, cv::Mat &K, float kScaleFactor)
 {
+    auto width = depthImg.cols;
+    auto height = depthImg.rows;
+    cloud.vertices.resize(height * width);
+    cloud.w = width;
+    cloud.h = height;
 	cv::Mat depth_img = depthImg;
 	if (depth_img.empty() || depth_img.depth() != CV_16U)
 	{
@@ -42,7 +42,7 @@ bool PlaneDetection::readDepthImage(cv::Mat depthImg, cv::Mat &K)
 	{
 		for (int j = 0; j < cols; j+=1)
 		{
-			double z = (double)(depth_img.at<unsigned short>(i, j)) / kScaleFactor;
+			double z = (double)(depth_img.at<unsigned short>(i, j)) * kScaleFactor;
 			if (_isnan(z))
 			{
 				cloud.vertices[vertex_idx++] = VertexType(0, 0, z);
@@ -56,7 +56,7 @@ bool PlaneDetection::readDepthImage(cv::Mat depthImg, cv::Mat &K)
 	return true;
 }
 
-void PlaneDetection::runPlaneDetection()
+void PlaneDetection::runPlaneDetection(int kDepthHeight, int kDepthWidth)
 {
 	seg_img_ = cv::Mat(kDepthHeight, kDepthWidth, CV_8UC3);
 	plane_filter.run(&cloud, &plane_vertices_, &seg_img_);

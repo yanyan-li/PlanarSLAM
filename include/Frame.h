@@ -264,7 +264,7 @@ namespace Planar_SLAM
         // Assign keypoints to the grid for speed up feature matching (called in the constructor).
         void AssignFeaturesToGrid();
 
-        void ComputePlanes(const cv::Mat &imDepth, const cv::Mat &depth, const cv::Mat &imGrey, cv::Mat K);
+        void ComputePlanes(const cv::Mat &imDepth, const cv::Mat &depth, const cv::Mat &imGrey, cv::Mat K, float depthMapFactor);
     };
 
 }// namespace Planar_SLAM

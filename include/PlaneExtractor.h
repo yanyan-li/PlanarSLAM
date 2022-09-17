@@ -11,11 +11,6 @@
 
 typedef Eigen::Vector3d VertexType;
 
-const int kScaleFactor = 5000;
-
-const int kDepthWidth = 640;
-const int kDepthHeight = 480;
-
 #ifdef __linux__
 #define _isnan(x) isnan(x)
 #endif
@@ -54,9 +49,9 @@ public:
 
 	bool readColorImage(cv::Mat RGBImg);
 
-	bool readDepthImage(cv::Mat depthImg, cv::Mat &K);
+	bool readDepthImage(cv::Mat depthImg, cv::Mat &K, float kScaleFactor);
 
-	void runPlaneDetection();
+	void runPlaneDetection(int kDepthHeight, int kDepthWidth);
 
 };
 

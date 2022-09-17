@@ -89,7 +89,7 @@ namespace Planar_SLAM {
         std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
         thread threadLines(&Planar_SLAM::Frame::ExtractLSD, this, imGray, depth, tmpK);
         thread threadPoints(&Planar_SLAM::Frame::ExtractORB, this, 0, imGray);
-        thread threadPlanes(&Planar_SLAM::Frame::ComputePlanes, this, depth, imDepth, imRGB, K);
+        thread threadPlanes(&Planar_SLAM::Frame::ComputePlanes, this, depth, imDepth, imRGB, K, depthMapFactor);
         threadPoints.join();
         threadLines.join();
         threadPlanes.join();
@@ -644,10 +644,10 @@ namespace Planar_SLAM {
         return Lines3D;
     }
 
-    void Frame::ComputePlanes(const cv::Mat &imDepth, const cv::Mat &Depth, const cv::Mat &imRGB, cv::Mat K) {
+    void Frame::ComputePlanes(const cv::Mat &imDepth, const cv::Mat &Depth, const cv::Mat &imRGB, cv::Mat K, float depthMapFactor) {
         planeDetector.readColorImage(imRGB);
-        planeDetector.readDepthImage(Depth, K);
-        planeDetector.runPlaneDetection();
+        planeDetector.readDepthImage(Depth, K, depthMapFactor);
+        planeDetector.runPlaneDetection(imDepth.rows, imDepth.cols);
 
         for (int i = 0; i < planeDetector.plane_num_; i++) {
             auto &indices = planeDetector.plane_vertices_[i];
