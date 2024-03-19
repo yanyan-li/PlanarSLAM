@@ -14,6 +14,10 @@ We have released our results to the community. New features in our generations a
 + **Surface normal** for every points
 + **Python interface** to read our dataset.
 
+<p align="center" width="100%">
+  <img width="45%" src="Examples/R1.png">
+  <img width="45%" src="Examples/OFF1.png">
+</p>
 
 ### updated on 11.12.2021
 
