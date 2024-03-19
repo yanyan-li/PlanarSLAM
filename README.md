@@ -11,7 +11,7 @@ However, the sparse maps from COLMAP lack structural information that may be cru
 We have released our results to the community. New features in our generations are summarized as follows:
 + Fill **low-textured areas** with point clouds. 
 + **Plane instances**. We provide the same label for every co-planar area.
-+ **Surface normal** for every points
++ **Surface normal** for every point.
 + **Python interface** to read our dataset.
 
 <p align="center" width="100%">
